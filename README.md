@@ -2,4 +2,4 @@
 
 A simple HTTP proxy for gemini.
 
-#![screenshot](./screenshot.png)
+![screenshot](./screenshot.png)

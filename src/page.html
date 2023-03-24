@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>Gemway</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<meta name="description" content="A minimalist proxy for gemini" />
+	<script src="https://cdn.jsdelivr.net/npm/prismjs/prism.min.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/latex.css/style.min.css" />
+	<link rel="stylesheet" href="https://latex.now.sh/prism/prism.css">
+</head>
+
+<body class="libertinus">
+	<script>
+		if (localStorage.getItem("theme") == 1) {document.body.classList.add("latex-dark")}
+
+		window.onload = () => {
+			document.getElementById("url-form").onsubmit = (event) => {
+				event.preventDefault();
+
+				const urlElem = document.getElementById("url");
+				const url = new URL(urlElem.value || urlElem.placeholder);
+
+				window.location.assign('/gemini' + url.pathname.replace('//', '/'));
+			};
+
+			document.getElementById("theme-button").onclick = () => {
+				if (localStorage.getItem("theme") == 1) {
+					document.body.classList.remove("latex-dark");
+					localStorage.setItem("theme", 0);
+				} else {
+					document.body.classList.add("latex-dark");
+					localStorage.setItem("theme", 1);
+				}
+			}
+		};
+	</script>
+	{{#if gemini_url}}
+	<header role="banner" style="display: flow-root;">
+		<h1 style="float: left; margin-bottom: 0px;"><a style="text-decoration-line: none;" href="/">Gemway</a></h1>
+		<p class="author" style="float: right">A minimalist proxy for <a target="_blank"
+				href="https://gemini.circumlunar.space/">gemini</a>.</p>
+	</header>
+	{{else}}
+	<header role="banner">
+		<h1>Gemway</h1>
+		<p class="author">A minimalist proxy for <a target="_blank" href="https://gemini.circumlunar.space/">gemini</a>.</p>
+	</header>
+	{{/if}}
+	<hr>
+	<form style="display: inline-flex; width: 100%; padding-left: 0.5rem; padding-right: 0.5rem;" id="url-form"
+		autocomplete="off">
+		<input type="url" id="url" placeholder="gemini://gemini.circumlunar.space" pattern="gemini://.*" class="url-input"
+			value="{{gemini_url}}" style="flex-grow: 1; margin-right: 0.5rem;" />
+		<input type="submit" />
+	</form>
+	<hr>
+	{{#if content}}
+	{{{content}}}
+	{{/if}}
+	{{#if error}}
+	<h2>Oops!</h2>
+	<p>There's been an error on the backend: <code>{{error}}</code></p>
+	{{/if}}
+
+	{{#if content}}{{else}}{{#if error }}{{else}}
+	<p>Welcome to Gemway, a <a href="https://en.wikipedia.org/wiki/Gemini_(protocol)">gemini</a> proxy which provides a
+		simple <a href="https://github.com/vincentdoerig/latex-css">LaTeX-like</a> web interface to the
+		Geminiverse.</p>
+	<p>Currently, Gemway is in a very early state. It doesn't inline images and the TLS/path parsing logic is a tiny bit
+		buggy. Gemway is a portmanteau of "gemini" and "gateway".</p>
+	{{/if}}{{/if}}
+	<hr>
+	<p style="text-align: center;"><i>&copy; 2023 Grant Handy</i> &#x2022; <a
+			href="https://github.com/grantshandy/gemway">Source Code</a> &#x2022 <a
+			style="text-decoration-line: underline; user-select: none; cursor: pointer;" id="theme-button">Toggle Dark
+			Mode</a></p>
+</body>
+
+</html>
